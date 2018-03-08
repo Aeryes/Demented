@@ -5,4 +5,4 @@ The game is built on the Pygame module for Python. Feel free to use any of the c
 
 Music credits go to their respected creators. All music used is royalty free.
 
-All code is Python 3.
+
