@@ -4,12 +4,6 @@ import os
 pygame.init()
 
 """These are classes that inialize things in the game"""
-#Constant variavles class.
-class Settings():
-    def __init__(self):
-        #Screen variables.
-        self.WIDTH = 1920
-        self.HEIGHT = 1080
 
 #Background class.
 class Background(pygame.sprite.Sprite):
