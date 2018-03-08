@@ -5,6 +5,7 @@ from settings import Settings, Background, Music_Mixer, loadCustomFont
 game_settings = Settings()
 screen = pygame.display.set_mode((game_settings.WIDTH, game_settings.HEIGHT), pygame.FULLSCREEN)
 pygame.display.set_caption('Demented')
+clock = pygame.time.Clock()
 
 #This class deals with the creation of game menus.
 class Menu():
@@ -22,7 +23,7 @@ class Menu():
     def add_button(self, text, pos, size):
         new_button = Button(text, pos, size)
         self.buttons.append(new_button)
-    
+
     """Tells if a button is pressed and completes actions."""
     def is_pressed(self):
         for button in self.buttons:
@@ -31,7 +32,7 @@ class Menu():
                 
     """Draws the menu buttons etc."""
     def draw(self):
-        for button in buttons:
+        for button in self.buttons:
             button.draw()
 
 #Main menu button class. Thank you to Github user ohdqueezy for this code.
@@ -103,10 +104,16 @@ def mainloop():
             main_menu.add_button('Settings', (865,800), 72)
             main_menu.add_button("Quit", (900,900), 72)
             
+            #Hovering logic.
             if main_menu.buttons[0].rect.collidepoint(pygame.mouse.get_pos()):
-                Button.hovered = True
-            else:
-                Button.hovered = False
+                main_menu.buttons[0].hovered = True
+                main_menu.buttons[0].draw()
+            elif main_menu.buttons[1].rect.collidepoint(pygame.mouse.get_pos()):
+                main_menu.buttons[1].hovered = True
+                main_menu.buttons[1].draw()
+            elif main_menu.buttons[2].rect.collidepoint(pygame.mouse.get_pos()):             
+                main_menu.buttons[2].hovered = True
+                main_menu.buttons[2].draw()
                 
         #Settings menu code.
         elif menu == settings_menu:
@@ -116,8 +123,9 @@ def mainloop():
         # display the screen
         pygame.display.flip()
         
+        #Clock object.
+        clock.tick(60)
 
 if __name__ == '__main__':
     pygame.init()
     mainloop()
-    
