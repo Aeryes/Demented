@@ -1,7 +1,10 @@
 import pygame as pg
 import sys
 from settings import Music_Mixer, loadCustomFont
- 
+
+#I would like to thank Reddit user Spartanman321 for helping collab on this state machine.
+#https://www.reddit.com/user/Spartanman321
+
 #Superclass of all states
 #Any data you wish to persist between all states would go in here
 #Logic that persists between all states would go in here
