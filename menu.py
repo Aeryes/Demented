@@ -1,10 +1,8 @@
 import pygame as pg
+import game
 import sys
 from settings import Music_Mixer, loadCustomFont
-
-#I would like to thank Reddit user Spartanman321 for helping collab on this state machine.
-#https://www.reddit.com/user/Spartanman321
-
+ 
 #Superclass of all states
 #Any data you wish to persist between all states would go in here
 #Logic that persists between all states would go in here
@@ -20,9 +18,9 @@ class MainMenu(States):
     def __init__(self):
         States.__init__(self)
         self.next = ''
-        self.playButton = Button('Play', (900, 650))
-        self.settingsButton = Button('Settings', (900, 770))
-        self.quitButton = Button('Quit', (900, 890))
+        self.playButton = Button('Play', (900, 640))
+        self.settingsButton = Button('Settings', (905, 780))
+        self.quitButton = Button('Quit', (900, 920))
         self.Menu_Music = Music_Mixer('Music/menu.mp3', 0.1, -1)
         
     def cleanup(self):
@@ -42,6 +40,7 @@ class MainMenu(States):
             #Switches to 'game' state
             if self.playButton.buttondown == True:
                 self.playButton.buttondown = False
+                pg.mixer.music.stop()
                 self.next = 'game'
                 self.done = True
             #Exits out of game
@@ -70,6 +69,7 @@ class MainMenu(States):
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = (0, 0)
         screen.blit(self.image, self.rect)
+        
 #Subclass of states. 
 class Settings(States):
     def __init__(self):
@@ -119,7 +119,6 @@ class Settings(States):
         self.rect.left, self.rect.top = (0, 0)
         screen.blit(self.image, self.rect)
         
-        
 class Button:
     def __init__(self,text,pos,size=(100,125),color=(0,0,200),highlight=(255,255,255)):
         self.normal = color
@@ -164,7 +163,7 @@ class Button:
 class Game(States):
     def __init__(self):
         States.__init__(self)
-        self.next = 'mainmenu'
+        self.next = 'levelone'
     def cleanup(self):
         print('cleaning up Game state stuff')
     def startup(self):
@@ -173,12 +172,13 @@ class Game(States):
         if event.type == pg.KEYDOWN:
             print('Game State keydown')
         elif event.type == pg.MOUSEBUTTONDOWN:
+            pg.mixer.music.play()
             self.done = True
     def update(self, screen, dt):
         self.draw(screen)
     def draw(self, screen):
         screen.fill((255, 0, 0))
- 
+
 '''
 Does not have to be a class
 Could be global scope
@@ -242,7 +242,8 @@ app = Control(**settings)
 #State Dictionary. Include all state classes here.
 state_dict = {'mainmenu': MainMenu(),
               'game': Game() ,
-              'settings' : Settings()}
+              'settings' : Settings(),
+              'levelone' : LevelOne()}
  
 #Setup State is called and sets the initial state of the program
 app.setup_states(state_dict, 'mainmenu')
