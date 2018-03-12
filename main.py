@@ -1,17 +1,7 @@
 import pygame as pg
 import game
 import sys
-from settings import Music_Mixer, loadCustomFont
- 
-#Superclass of all states
-#Any data you wish to persist between all states would go in here
-#Logic that persists between all states would go in here
-class States():
-    def __init__(self):
-        self.done = False
-        self.next = None
-        self.quit = False
-        self.previous = None
+from settings import Music_Mixer, loadCustomFont, States
  
 #Subclass of States
 class MainMenu(States):
