@@ -1,7 +1,6 @@
 import sys
 import pygame as pg
-import main
-from settings import Music_Mixer, loadCustomFont
+from settings import Music_Mixer, loadCustomFont, States
 
 class LevelOne(States):
     def __init__(self):
