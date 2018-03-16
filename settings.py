@@ -3,6 +3,8 @@ import os
 
 pg.init()
 
+screen = pg.display.set_mode((1920,1080), pg.FULLSCREEN)
+
 #Superclass of all states
 #Any data you wish to persist between all states would go in here
 #Logic that persists between all states would go in here
