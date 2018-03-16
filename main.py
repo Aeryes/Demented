@@ -1,7 +1,7 @@
 import pygame as pg
 from mainmenu import MainMenu, Settings, Audio, Video
 from game import Game, LevelOne
-from settings import Music_Mixer, loadCustomFont, States
+from settings import Music_Mixer, loadCustomFont, States, screen
   
 screen_size = screen
         
