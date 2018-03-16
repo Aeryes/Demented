@@ -5,6 +5,16 @@ pygame.init()
 
 """These are classes that inialize things in the game"""
 
+#Superclass of all states
+#Any data you wish to persist between all states would go in here
+#Logic that persists between all states would go in here
+class States():
+    def __init__(self):
+        self.done = False
+        self.next = None
+        self.quit = False
+        self.previous = None
+
 #Background class.
 class Background(pygame.sprite.Sprite):
     def __init__(self, image_file, location):
