@@ -2,6 +2,8 @@ import pygame as pg
 from mainmenu import MainMenu, Settings, Audio, Video
 from game import Game, LevelOne
 from settings import Music_Mixer, loadCustomFont, States
+  
+screen_size = screen
         
 '''
 Does not have to be a class
@@ -14,11 +16,9 @@ Switches between states
 '''
 
 class Control:
-    def __init__(self, **settings):
-        self.__dict__.update(settings)
+    def __init__(self):
         self.done = False
         self.clock = pg.time.Clock()
-        self.screen = pg.display.set_mode((1920,1080), pg.FULLSCREEN)
         
     def setup_states(self, state_dict, start_state):
         self.state_dict = state_dict
@@ -48,14 +48,10 @@ class Control:
  
     def main_game_loop(self):
         while not self.done:
-            delta_time = self.clock.tick(self.fps)/1000
+            delta_time = self.clock.tick(60)/1000
             self.event_loop()
             self.update(delta_time)
             pg.display.update()
- 
-#Program starts here by creating dictionary of settings
-settings = {'fps' :60,
-            'FULLSCREEN' : True}
  
 #Settings from above dictionary get passed into Control class
 #Control creates app object.
