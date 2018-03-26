@@ -1,6 +1,6 @@
 import pygame as pg
-from settings import Music_Mixer, loadCustomFont, States
-from entities import Player
+from settings import Music_Mixer, loadCustomFont, States, screen
+from entities import Player, Platform
 
 #Subclass of States
 #Can make subclasses of the subclass
@@ -22,7 +22,6 @@ class Game(States):
         elif event.type == pg.MOUSEBUTTONDOWN:
             pg.mixer.music.stop()
             self.done = True
-            
     def update(self, screen, dt):
         self.draw(screen)
         
@@ -34,7 +33,8 @@ class LevelOne(States):
     def __init__(self):
         States.__init__(self)
         self.next = 'mainmenu'
-        self.player_one = Player()
+        self.player_one = Player(950, 950)
+        self.platforms = []
         
     def cleanup(self):
         print('cleaning up Game Level One state stuff')
@@ -48,10 +48,30 @@ class LevelOne(States):
         elif event.type == pg.MOUSEBUTTONDOWN:
             pg.mixer.music.play()
             self.done = True
-            
+        
     def update(self, screen, dt):
         self.draw(screen)
+        self.player_one.move_player(1, dt)
+        self.player_one.runAnim(dt)
+        self.player_one.jumping(dt)
+        self.create_plat(1200,900)
+        self.player_one.is_collided_with(self.platforms)
         
+    def draw_level(self):
+            pass
+    
+    def create_plat(self, x, y):
+        plat = Platform(x, y)
+        self.platforms.append(plat)
+        return plat
+    
     def draw(self, screen):
-        screen.fill((0, 0, 0))
+        screen.fill((255, 255, 0))
+        
+        #Move and draw the player.
         self.player_one.draw_entity()
+        
+        #Draw the test platform.
+        for plat in self.platforms:
+            plat.draw_plat()
+     
