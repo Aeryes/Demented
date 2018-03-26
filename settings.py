@@ -4,6 +4,7 @@ import os
 pg.init()
 
 screen = pg.display.set_mode((1920,1080), pg.FULLSCREEN)
+GROUND_HEIGHT = 950
 
 #Superclass of all states
 #Any data you wish to persist between all states would go in here
@@ -71,19 +72,12 @@ class Music_Mixer():
         pg.mixer.music.play(loops)
         pg.mixer.music.set_volume(vol)
         print("The music is playing.")
-    
-"""These are all functions that make the game work well."""   
+      
 #Font function, code taken from reddit post user EricsonWillians modified for use in this game, 
 #https://www.reddit.com/r/pygame/comments/278sfa/load_font_which_is_not_a_standard_font/.
 def loadCustomFont(filename, size):
-    """
-    A function to load a custom font from a file.
-    """
     try:
         f = pg.font.Font(filename, size)
         return f
     except:
         print('Cannot load the custom font, does it exist?')
-
-        
-

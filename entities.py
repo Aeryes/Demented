@@ -1,24 +1,145 @@
 import pygame as pg
-from settings import Music_Mixer, loadCustomFont, States, screen
+from settings import Music_Mixer, loadCustomFont, States, screen, GROUND_HEIGHT
+from time import sleep
 
 """This section contains entity states which are separate from game and menu states."""
-class Player(States):
-    def __init__(self):
-        States.__init__(self)
-        self.next = ''
+class Player(pg.sprite.Sprite):
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)
         self.health = 100
-        self.speed = 2
+        self.speed = 1
         self.screen = screen
-        self.rect = pg.draw.rect(self.screen, (255, 0, 0), [900,600,20,45])
-        self.image = pg.image.load('ArtWIP/Stickman_stand_still.png').convert_alpha()
         
-    def draw(self, screen):
-        screen.fill((255, 0, 0))
-           
+        self.pos_x = x
+        self.pos_y = y
+        self.vel_x = 5
+        self.vel_y = 15
+        
+        self.running_right = False
+        self.running_left = False
+        self.is_jumping = False
+        
+        self.mass = 3
+        
+        #List of pictures for animations.
+        stick_still = pg.image.load('Images/Animations/PlayerRun/Stickman_stand_still.png').convert_alpha()
+        stick_still_2 = pg.image.load('Images/Animations/PlayerRun/Stickman_stand_still_2.png').convert_alpha()
+        
+        #Right running pictures.
+        stick_run_1_right = pg.image.load('Images/Animations/PlayerRun/Stickman_run_1.png').convert_alpha()
+        stick_run_2_right = pg.image.load('Images/Animations/PlayerRun/Stickman_run_2.png').convert_alpha()
+        stick_run_3_right = pg.image.load('Images/Animations/PlayerRun/Stickman_run_3.png').convert_alpha()
+        stick_run_4_right = pg.image.load('Images/Animations/PlayerRun/Stickman_run_4.png').convert_alpha()
+        stick_run_5_right = pg.image.load('Images/Animations/PlayerRun/Stickman_run_4.png').convert_alpha()
+        
+        #Left running pictures.
+        stick_run_1_left = pg.image.load('Images/Animations/PlayerRun/Stickman_run_1_left.png').convert_alpha()
+        stick_run_2_left = pg.image.load('Images/Animations/PlayerRun/Stickman_run_2_left.png').convert_alpha()
+        stick_run_3_left = pg.image.load('Images/Animations/PlayerRun/Stickman_run_3_left.png').convert_alpha()
+        stick_run_4_left = pg.image.load('Images/Animations/PlayerRun/Stickman_run_4_left.png').convert_alpha()
+        stick_run_5_left = pg.image.load('Images/Animations/PlayerRun/Stickman_run_4_left.png').convert_alpha()
+        
+        #Lists for animation movement.
+        self.STICKMAN_IDLE = [stick_still]
+        self.STICKMAN_RUN_RIGHT = [stick_run_1_right, stick_run_2_right, stick_run_5_right, stick_run_3_right, stick_run_4_right]
+        self.STICKMAN_RUN_LEFT = [stick_run_1_left, stick_run_2_left, stick_run_5_left, stick_run_3_left, stick_run_4_left]
+                       
+                       
+        self.images = self.STICKMAN_IDLE
+        self.image = self.images[0]
+        
+        self.rect = self.image.get_rect(center=(x, y))
+        
+        self.anim_index = 0
+        self.anim_timer = 0
+        self.ms = 0
+        
     #Moves the player and begins the animation phase.
-    def move_player(self, speed):
-        pass
+    def move_player(self, speed, dt):
+        self.pressed = pg.key.get_pressed()
+                
+        if self.pressed[pg.K_a]:
+            self.running_left = True
+            if self.running_left:
+                    self.pos_x -= self.vel_x  # Move left.
+                    self.ms = 0.07
+                    self.images = self.STICKMAN_RUN_LEFT  # Change the animation.
+        if self.pressed[pg.K_d]:
+            self.running_right = True
+            if self.running_right:
+                    self.pos_x += self.vel_x  # Move right.
+                    self.ms = 0.07
+                    self.images = self.STICKMAN_RUN_RIGHT  # Change the animation.
+        if not self.pressed[pg.K_d] and not self.pressed[pg.K_a]:
+            self.images = self.STICKMAN_IDLE  # Change the animation.
+            self.ms = 0.07
+        if self.pressed[pg.K_w]:
+            self.is_jumping = True
+                    
+        # Update the rect because it's used to blit the image.
+        self.rect.center = self.pos_x, self.pos_y
+    
+    #Makes the player jump.
+    def jumping(self, dt):
+        if self.is_jumping:
+            #Calculate force. 
+            F = (0.5 * self.mass * (self.vel_y))
             
+            #Change position.
+            self.pos_y = self.pos_y - F
+            
+            #Change velocity.
+            self.vel_y = self.vel_y - 1
+            
+            if self.pos_y == GROUND_HEIGHT:
+                self.pos_y = GROUND_HEIGHT
+                self.is_jumping = False
+                self.vel_y = 15
+   
+    #Checks for collision.
+    def is_collided_with(self, l):
+        for wall in l:
+            if self.rect.colliderect(wall.rect):
+                if self.rect.right >= wall.rect.left:
+                    self.rect.right = wall.rect.left
+ 
+               # if self.rect.left == wall.rect.right:
+                  #  self.rect.left = wall.rect.right
+ 
+                if self.rect.bottom >= wall.rect.top:
+                    self.rect.bottom = wall.rect.top
+ 
+               # if self.rect.top == wall.rect.bottom:
+                  #  self.rect.top = wall.rect.bottom 
+
+    #Animates the running movement of the player.
+    def runAnim(self, dt):
+        # Add the delta time to the anim_timer and increment the
+        # index after 70 ms.
+        self.anim_timer += dt
+                
+        if self.anim_timer > self.ms:
+            self.anim_timer = 0  # Reset the timer.
+            self.anim_index += 1  # Increment the index.
+            self.anim_index %= len(self.images)  # Modulo to cycle the index.
+            self.image = self.images[self.anim_index]  # And switch the image.
+
     #draws the player to the screen.
     def draw_entity(self):
         screen.blit(self.image, self.rect)
+
+#Creates platforms that the user can jump onto.
+class Platform(pg.sprite.Sprite):
+    def __init__(self, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.pos_x = x
+        self.pos_y = y
+        
+        self.moving = False
+        
+        self.image = None
+        self.rect = pg.Rect(x, y, 150, 200)
+        
+    #draws the platform to the screen.
+    def draw_plat(self):
+        pg.draw.rect(screen, (0,0,0), self.rect)
