@@ -2,7 +2,7 @@ import pygame as pg
 from mainmenu import MainMenu, Settings, Audio, Video
 from game import Game, LevelOne
 from settings import Music_Mixer, loadCustomFont, States, screen
-  
+ 
 screen_size = screen
         
 '''
@@ -19,6 +19,7 @@ class Control:
     def __init__(self):
         self.done = False
         self.clock = pg.time.Clock()
+        self.screen = screen_size
         
     def setup_states(self, state_dict, start_state):
         self.state_dict = state_dict
@@ -53,11 +54,12 @@ class Control:
             self.update(delta_time)
             pg.display.update()
  
+ 
 #Settings from above dictionary get passed into Control class
 #Control creates app object.
 #Then, each state (Menu & Game) object get assigned to a dicitonary.
 #This allows control to be able to switch to and from any state as needed.
-app = Control(**settings)
+app = Control()
  
 #State Dictionary. Include all state classes here.
 state_dict = {'mainmenu': MainMenu(),
