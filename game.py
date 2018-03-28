@@ -34,7 +34,10 @@ class LevelOne(States):
         States.__init__(self)
         self.next = 'mainmenu'
         self.player_one = Player(950, 950)
-        self.platforms = []
+        self.platform_one = Platform(1200,950)
+
+        self.platforms = pg.sprite.Group()
+        self.platforms.add(self.platform_one)
         
     def cleanup(self):
         print('cleaning up Game Level One state stuff')
@@ -54,7 +57,6 @@ class LevelOne(States):
         self.player_one.move_player(1, dt)
         self.player_one.runAnim(dt)
         self.player_one.jumping(dt)
-        self.create_plat(1200,900)
         self.player_one.is_collided_with(self.platforms)
         
     def draw_level(self):
@@ -62,7 +64,7 @@ class LevelOne(States):
     
     def create_plat(self, x, y):
         plat = Platform(x, y)
-        self.platforms.append(plat)
+        self.platforms.add(plat)
         return plat
     
     def draw(self, screen):
@@ -74,4 +76,3 @@ class LevelOne(States):
         #Draw the test platform.
         for plat in self.platforms:
             plat.draw_plat()
-     
