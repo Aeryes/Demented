@@ -13,13 +13,16 @@ class Player(pg.sprite.Sprite):
         self.pos_x = x
         self.pos_y = y
         self.vel_x = 5
-        self.vel_y = 15
+        self.vel_y = 20
+
+        self.current_vel_x = 0
+        self.current_vel_y = 0
         
         self.running_right = False
         self.running_left = False
         self.is_jumping = False
         
-        self.mass = 3
+        self.mass = 5
         
         #List of pictures for animations.
         stick_still = pg.image.load('Images/Animations/PlayerRun/Stickman_stand_still.png').convert_alpha()
@@ -57,17 +60,21 @@ class Player(pg.sprite.Sprite):
     #Moves the player and begins the animation phase.
     def move_player(self, speed, dt):
         self.pressed = pg.key.get_pressed()
+        self.current_vel_x = 0
+        self.current_vel_y = 0
                 
         if self.pressed[pg.K_a]:
             self.running_left = True
             if self.running_left:
                     self.pos_x -= self.vel_x  # Move left.
+                    self.current_vel_x = -self.vel_x
                     self.ms = 0.07
                     self.images = self.STICKMAN_RUN_LEFT  # Change the animation.
         if self.pressed[pg.K_d]:
             self.running_right = True
             if self.running_right:
                     self.pos_x += self.vel_x  # Move right.
+                    self.current_vel_x = self.vel_x
                     self.ms = 0.07
                     self.images = self.STICKMAN_RUN_RIGHT  # Change the animation.
         if not self.pressed[pg.K_d] and not self.pressed[pg.K_a]:
@@ -98,19 +105,23 @@ class Player(pg.sprite.Sprite):
    
     #Checks for collision.
     def is_collided_with(self, l):
-        for wall in l:
-            if self.rect.colliderect(wall.rect):
-                if self.rect.right >= wall.rect.left:
-                    self.rect.right = wall.rect.left
- 
-               # if self.rect.left == wall.rect.right:
-                  #  self.rect.left = wall.rect.right
- 
-                if self.rect.bottom >= wall.rect.top:
-                    self.rect.bottom = wall.rect.top
- 
-               # if self.rect.top == wall.rect.bottom:
-                  #  self.rect.top = wall.rect.bottom 
+        collide_list = pg.sprite.spritecollide(self, l, False) #Will make a list of all sprites collidiing with self 
+        
+        for wall in collide_list:
+            if self.current_vel_x > 0: # I added self.current_vel_x and y to know in what direction the player is currently moving.
+                self.rect.right = wall.rect.left
+                self.pos_x = self.rect.centerx #You forgot to change self.pos_x, which resulted in the player being able to walk through the wall after some time spassing around ;-)
+            elif self.current_vel_x > 0 and self.is_jumping:
+                self.rect.bottom = wall.rect.top
+                self.pos_y = self.rect.centery
+            
+            if self.current_vel_x < 0:
+                self.rect.left = wall.rect.right
+                self.pos_x = self.rect.centerx
+                
+            if self.current_vel_y < 0:
+                self.rect.bottom = wall.rect.top
+                self.pos_y = self.rect.centery
 
     #Animates the running movement of the player.
     def runAnim(self, dt):
