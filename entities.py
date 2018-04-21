@@ -94,7 +94,7 @@ class Player(pg.sprite.Sprite):
             print('You cannot jump that much... chill...')
             self.jump_count = 0
             if self.jump_count < 6:
-                pas
+                pass
                    
         # Update the rect because it's used to blit the image.
         self.rect.center = self.pos_x, self.pos_y
