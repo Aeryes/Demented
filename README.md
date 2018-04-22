@@ -9,4 +9,6 @@ This was my first project and will be completed in my own time, there are no dea
 
 Music credits go to their respected creators. All music used is royalty free.
 
-
+******Dependencies:******
+- Python 3.X
+- pygame
