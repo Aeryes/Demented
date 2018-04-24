@@ -14,6 +14,7 @@ Music credits go to their respected creators. All music used is royalty free.
 - pygame
 
 ******Progress:******
+
 Thing that are done:
 - Finished basic player movement.
 - Added in basic collision detection for the player.
