@@ -12,3 +12,21 @@ Music credits go to their respected creators. All music used is royalty free.
 ******Dependencies:******
 - Python 3.X
 - pygame
+
+******Progress:******
+Thing that are done:
+- Finished basic player movement.
+- Added in basic collision detection for the player.
+- Created menu screen and artwork for the menu and player.
+
+Things get to do:
+- Add scrolling screen into game levels.
+- Add enemy entities into the game
+- Artwork and sounds for game levels:
+  - Enemy artwork.
+  - Platform artwork 
+  - Level background artwork.
+  - Music for levels.
+  - Sounds for entities and actions.
+- Add a pause screen.
+- Add a game saving attribute.
