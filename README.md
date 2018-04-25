@@ -1,4 +1,5 @@
 **Demented**
+
 Demented is a stick man platformer. The game will involve 5 levels each with unique enemies and strange encounters.
 
 The game is built on the Pygame module for Python. Feel free to use any of the code in this game for your own personal projects. Just send me a link to your project so I can enjoy watching its progress, all I ask is that you link my repo somewhere in your project for people to see.
