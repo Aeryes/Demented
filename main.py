@@ -1,6 +1,6 @@
 import pygame as pg
-from mainmenu import MainMenu, Settings, Audio, Video
-from game import Game, LevelOne
+from mainmenu import MainMenu
+from game import Game
 from settings import Music_Mixer, loadCustomFont, States, screen
  
 screen_size = screen
@@ -63,11 +63,7 @@ app = Control()
  
 #State Dictionary. Include all state classes here.
 state_dict = {'mainmenu': MainMenu(),
-              'game': Game() ,
-              'settings' : Settings(),
-              'levelone' : LevelOne(),
-              'audio' : Audio(),
-              'video' : Video()}
+              'game': Game()}
  
 #Setup State is called and sets the initial state of the program
 app.setup_states(state_dict, 'mainmenu')
