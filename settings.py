@@ -3,8 +3,18 @@ import os
 
 pg.init()
 
-screen = pg.display.set_mode((1920,1080), pg.FULLSCREEN)
+WIDTH = 1920
+HEIGHT = 1080
+
+screen = pg.display.set_mode((WIDTH, HEIGHT), pg.FULLSCREEN)
 GROUND_HEIGHT = 950
+vec = pg.math.Vector2
+
+#Player properties.
+PLAYER_ACC = 1
+PLAYER_FRICTION = -0.12
+PLAYER_GRAV = 0.8
+PLAYER_JUMP = 20
 
 #Superclass of all states
 #Any data you wish to persist between all states would go in here

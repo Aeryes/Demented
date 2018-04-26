@@ -1,5 +1,5 @@
 import pygame as pg
-from mainmenu import MainMenu
+from mainmenu import MainMenu, GameOver
 from game import Game
 from settings import Music_Mixer, loadCustomFont, States, screen
  
@@ -63,7 +63,8 @@ app = Control()
  
 #State Dictionary. Include all state classes here.
 state_dict = {'mainmenu': MainMenu(),
-              'game': Game()}
+              'game': Game(),
+              'gameover' : GameOver()}
  
 #Setup State is called and sets the initial state of the program
 app.setup_states(state_dict, 'mainmenu')
