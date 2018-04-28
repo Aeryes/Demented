@@ -1,6 +1,5 @@
 import pygame as pg
 import random
-from os import path
 from settings import Music_Mixer, loadCustomFont, States, screen, WIDTH, HEIGHT, HS_FILE
 from entities import Player, Platform
  
@@ -52,8 +51,7 @@ class Game(States):
     
     def load_data(self):
         #Load the high score.
-        self.dir = path.dirname(__file__)
-        with open(path.join(self.dir, HS_FILE), 'r') as f:
+        with open(HS_FILE), 'wr') as f:
             try:
                 self.highscore = int(f.read())
             except:
@@ -80,7 +78,7 @@ class Game(States):
                     self.score += 10
                     if self.score > self.highscore:
                         self.highscore = self.score
-                        with open(path.join(self.dir, HS_FILE), 'w') as f:
+                        with open(HS_FILE), 'w') as f:
                             f.write(str(self.score))
 
         if self.player.rect.bottom > HEIGHT:
