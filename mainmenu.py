@@ -1,6 +1,6 @@
 import pygame as pg
-from game import LevelOne
-from settings import Music_Mixer, loadCustomFont, States, Button
+import sys
+from settings import Music_Mixer, loadCustomFont, States, Button, screen
 
 #Subclass of States
 class MainMenu(States):
@@ -8,9 +8,9 @@ class MainMenu(States):
         States.__init__(self)
         self.next = ''
         self.playButton = Button('Play', (900, 640))
-        self.settingsButton = Button('Settings', (905, 780))
-        self.quitButton = Button('Quit', (900, 920))
+        self.quitButton = Button('Quit', (905, 780))
         self.Menu_Music = Music_Mixer('Music/menu.mp3', 0.1, -1)
+        pg.mixer.music.play()
         
     def cleanup(self):
         print('cleaning up Menu state stuff')
@@ -23,7 +23,6 @@ class MainMenu(States):
             print('Menu State keydown')
         elif event.type == pg.MOUSEBUTTONDOWN:
             self.playButton.MouseDown(event)
-            self.settingsButton.MouseDown(event)
             self.quitButton.MouseDown(event)
         elif event.type == pg.MOUSEBUTTONUP:
             #Switches to 'game' state
@@ -33,23 +32,16 @@ class MainMenu(States):
                 self.next = 'game'
                 self.done = True
             #Exits out of game
-            #Switches to 'settings' state.
-            elif self.settingsButton.buttondown == True:
-                self.settingsButton.buttondown = False
-                self.next = 'settings'
-                self.done = True
             elif self.quitButton.buttondown == True:
                 self.quitButton.buttondown = False
                 sys.exit()
         elif event.type == pg.MOUSEMOTION:
             self.playButton.Update(event)
-            self.settingsButton.Update(event)
             self.quitButton.Update(event)
  
     def update(self, screen, dt):
         self.draw(screen)
         self.playButton.Draw(screen)
-        self.settingsButton.Draw(screen)
         self.quitButton.Draw(screen)
        
     def draw(self, screen):
@@ -60,58 +52,54 @@ class MainMenu(States):
         self.rect.left, self.rect.top = (0, 0)
         screen.blit(self.image, self.rect)
         
-#Subclass of states.
-#General settings menu. 
-class Settings(States):
+#Subclass of States
+class GameOver(States):
     def __init__(self):
         States.__init__(self)
-        self.next = ''
-        self.videoButton = Button('Video', (900, 650))
-        self.audioButton = Button('Audio', (900, 770))
-        self.backButton = Button('Back', (900, 890))
+        self.next = 'mainmenu'
+        self.againButton = Button('Play Again', (900, 800))
+        self.menuButton = Button('Main Menu', (900, 650))
         self.Menu_Music = Music_Mixer('Music/menu.mp3', 0.1, -1)
         
     def cleanup(self):
-        print('cleaning up Settings Menu state stuff')
+        print('cleaning up GameOver state stuff')
  
     def startup(self):
-        print('starting Settings Menu state stuff')
-        
+        print('starting GameOver state stuff')
+       
     def get_event(self, event):
         if event.type == pg.KEYDOWN:
-            print('Setttings Menu State keydown')
+            print('Menu State keydown')
         elif event.type == pg.MOUSEBUTTONDOWN:
-            self.videoButton.MouseDown(event)
-            self.audioButton.MouseDown(event)
-            self.backButton.MouseDown(event)
+            self.againButton.MouseDown(event)
+            self.menuButton.MouseDown(event)
         elif event.type == pg.MOUSEBUTTONUP:
-            #Goes to audio menu.
-            if self.audioButton.buttondown == True:
-                self.audioButton.buttondown = False
-                self.next = 'audio'
+            #Switches to 'menu' state
+            if self.againButton.buttondown == True:
+                self.againButton.buttondown = False
+                pg.mixer.music.stop()
+                self.next = 'game'
                 self.done = True
-            #Goes to video menu.
-            elif self.videoButton.buttondown == True:
-                self.videoButton.buttondown = False
-                self.next = 'video'
-                self.done = True
-            #Switches to 'game' state
-            elif self.backButton.buttondown == True:
-                self.backButton.buttondown = False
+            if self.menuButton.buttondown == True:
+                self.menuButton.buttondown = False
                 self.next = 'mainmenu'
                 self.done = True
-            #Exits out of game
         elif event.type == pg.MOUSEMOTION:
-            self.videoButton.Update(event)
-            self.audioButton.Update(event)
-            self.backButton.Update(event)
+            self.againButton.Update(event)
+            self.menuButton.Update(event)
  
     def update(self, screen, dt):
         self.draw(screen)
-        self.videoButton.Draw(screen)
-        self.audioButton.Draw(screen)
-        self.backButton.Draw(screen)
-       
+        self.againButton.Draw(screen)
+        self.menuButton.Draw(screen)
+        
+    def draw_text(self, text, size, color, x, y):
+        self.font = loadCustomFont('Fonts/Amatic_SC/amatic_sc.ttf', 72)
+        text_surface = self.font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        screen.blit(text_surface, text_rect)
+    
     def draw(self, screen):
         #Background
         pg.sprite.Sprite.__init__(self)
@@ -119,93 +107,4 @@ class Settings(States):
         self.rect = self.image.get_rect()
         self.rect.left, self.rect.top = (0, 0)
         screen.blit(self.image, self.rect)
-
-#Subclass of states.
-#Menu for audio configuration. 
-class Audio(States):
-    def __init__(self):
-        States.__init__(self)
-        self.next = ''
-        self.audioButton = Button('Audio', (900, 650))
-        self.backButton = Button('Back', (900, 890))
-        self.Menu_Music = Music_Mixer('Music/menu.mp3', 0.1, -1)
-        
-    def cleanup(self):
-        print('cleaning up Audio Settings Menu state stuff')
- 
-    def startup(self):
-        print('starting Audio Settings Menu state stuff')
-        
-    def get_event(self, event):
-        if event.type == pg.KEYDOWN:
-            print('Audio Menu State keydown')
-        elif event.type == pg.MOUSEBUTTONDOWN:
-            self.audioButton.MouseDown(event)
-            self.backButton.MouseDown(event)
-        elif event.type == pg.MOUSEBUTTONUP:
-            #Switches to 'game' state
-            if self.backButton.buttondown == True:
-                self.backButton.buttondown = False
-                self.next = 'settings'
-                self.done = True
-            #Exits out of game
-        elif event.type == pg.MOUSEMOTION:
-            self.audioButton.Update(event)
-            self.backButton.Update(event)
- 
-    def update(self, screen, dt):
-        self.draw(screen)
-        self.audioButton.Draw(screen)
-        self.backButton.Draw(screen)
-       
-    def draw(self, screen):
-        #Background
-        pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load('Images/Screen_bgs/menu_bg.jpg').convert()
-        self.rect = self.image.get_rect()
-        self.rect.left, self.rect.top = (0, 0)
-        screen.blit(self.image, self.rect)
-
-class Video(States):
-    def __init__(self):
-        States.__init__(self)
-        self.next = ''
-        self.videoButton = Button('Video', (900, 650))
-        self.backButton = Button('Back', (900, 890))
-        self.Menu_Music = Music_Mixer('Music/menu.mp3', 0.1, -1)
-        
-    def cleanup(self):
-        print('cleaning up Video Settings Menu state stuff')
- 
-    def startup(self):
-        print('starting Video Settings Menu state stuff')
-        
-    def get_event(self, event):
-        if event.type == pg.KEYDOWN:
-            print('Video Menu State keydown')
-        elif event.type == pg.MOUSEBUTTONDOWN:
-            self.videoButton.MouseDown(event)
-            self.backButton.MouseDown(event)
-        elif event.type == pg.MOUSEBUTTONUP:
-            #Switches to 'game' state
-            if self.backButton.buttondown == True:
-                self.backButton.buttondown = False
-                self.next = 'settings'
-                self.done = True
-            #Exits out of game
-        elif event.type == pg.MOUSEMOTION:
-            self.videoButton.Update(event)
-            self.backButton.Update(event)
- 
-    def update(self, screen, dt):
-        self.draw(screen)
-        self.videoButton.Draw(screen)
-        self.backButton.Draw(screen)
-       
-    def draw(self, screen):
-        #Background
-        pg.sprite.Sprite.__init__(self)
-        self.image = pg.image.load('Images/Screen_bgs/menu_bg.jpg').convert()
-        self.rect = self.image.get_rect()
-        self.rect.left, self.rect.top = (0, 0)
-        screen.blit(self.image, self.rect)
+        self.draw_text('Game Over', 22, (0,0,0), 950, 400)

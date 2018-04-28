@@ -1,8 +1,9 @@
 import pygame as pg
-from mainmenu import MainMenu, Settings, Audio, Video
-from game import Game, LevelOne
+from mainmenu import MainMenu, GameOver
+from game import Game
 from settings import Music_Mixer, loadCustomFont, States, screen
- 
+import sys
+
 screen_size = screen
         
 '''
@@ -54,7 +55,6 @@ class Control:
             self.update(delta_time)
             pg.display.update()
  
- 
 #Settings from above dictionary get passed into Control class
 #Control creates app object.
 #Then, each state (Menu & Game) object get assigned to a dicitonary.
@@ -63,11 +63,8 @@ app = Control()
  
 #State Dictionary. Include all state classes here.
 state_dict = {'mainmenu': MainMenu(),
-              'game': Game() ,
-              'settings' : Settings(),
-              'levelone' : LevelOne(),
-              'audio' : Audio(),
-              'video' : Video()}
+              'game': Game(),
+              'gameover' : GameOver()}
  
 #Setup State is called and sets the initial state of the program
 app.setup_states(state_dict, 'mainmenu')

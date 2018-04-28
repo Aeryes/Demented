@@ -3,8 +3,19 @@ import os
 
 pg.init()
 
-screen = pg.display.set_mode((1920,1080), pg.FULLSCREEN)
+WIDTH = 1920
+HEIGHT = 1080
+
+HS_FILE = 'highscore.txt'
+screen = pg.display.set_mode((WIDTH, HEIGHT), pg.FULLSCREEN)
 GROUND_HEIGHT = 950
+vec = pg.math.Vector2
+
+#Player properties.
+PLAYER_ACC = 1
+PLAYER_FRICTION = -0.12
+PLAYER_GRAV = 0.8
+PLAYER_JUMP = 20
 
 #Superclass of all states
 #Any data you wish to persist between all states would go in here
@@ -55,7 +66,6 @@ class Button:
         # let you know when mouse is over button and button was pressed.
         if self.buttondown and self.mouseover:
             self.buttondown = False
- 
 
 #Background class.
 class Background(pg.sprite.Sprite):
