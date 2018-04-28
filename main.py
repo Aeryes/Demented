@@ -2,7 +2,8 @@ import pygame as pg
 from mainmenu import MainMenu, GameOver
 from game import Game
 from settings import Music_Mixer, loadCustomFont, States, screen
- 
+import sys
+
 screen_size = screen
         
 '''
@@ -53,7 +54,6 @@ class Control:
             self.event_loop()
             self.update(delta_time)
             pg.display.update()
- 
  
 #Settings from above dictionary get passed into Control class
 #Control creates app object.

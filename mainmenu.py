@@ -10,6 +10,7 @@ class MainMenu(States):
         self.playButton = Button('Play', (900, 640))
         self.quitButton = Button('Quit', (905, 780))
         self.Menu_Music = Music_Mixer('Music/menu.mp3', 0.1, -1)
+        pg.mixer.music.play()
         
     def cleanup(self):
         print('cleaning up Menu state stuff')
@@ -56,7 +57,8 @@ class GameOver(States):
     def __init__(self):
         States.__init__(self)
         self.next = 'mainmenu'
-        self.continueButton = Button('Continue', (900, 640))
+        self.againButton = Button('Play Again', (900, 800))
+        self.menuButton = Button('Main Menu', (900, 650))
         self.Menu_Music = Music_Mixer('Music/menu.mp3', 0.1, -1)
         
     def cleanup(self):
@@ -69,21 +71,28 @@ class GameOver(States):
         if event.type == pg.KEYDOWN:
             print('Menu State keydown')
         elif event.type == pg.MOUSEBUTTONDOWN:
-            self.continueButton.MouseDown(event)
+            self.againButton.MouseDown(event)
+            self.menuButton.MouseDown(event)
         elif event.type == pg.MOUSEBUTTONUP:
-            #Switches to 'game' state
-            if self.continueButton.buttondown == True:
-                self.continueButton.buttondown = False
+            #Switches to 'menu' state
+            if self.againButton.buttondown == True:
+                self.againButton.buttondown = False
                 pg.mixer.music.stop()
+                self.next = 'game'
+                self.done = True
+            if self.menuButton.buttondown == True:
+                self.menuButton.buttondown = False
                 self.next = 'mainmenu'
                 self.done = True
         elif event.type == pg.MOUSEMOTION:
-            self.continueButton.Update(event)
+            self.againButton.Update(event)
+            self.menuButton.Update(event)
  
     def update(self, screen, dt):
         self.draw(screen)
-        self.continueButton.Draw(screen)
-    
+        self.againButton.Draw(screen)
+        self.menuButton.Draw(screen)
+        
     def draw_text(self, text, size, color, x, y):
         self.font = loadCustomFont('Fonts/Amatic_SC/amatic_sc.ttf', 72)
         text_surface = self.font.render(text, True, color)

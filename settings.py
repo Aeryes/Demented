@@ -6,6 +6,7 @@ pg.init()
 WIDTH = 1920
 HEIGHT = 1080
 
+HS_FILE = 'highscore.txt'
 screen = pg.display.set_mode((WIDTH, HEIGHT), pg.FULLSCREEN)
 GROUND_HEIGHT = 950
 vec = pg.math.Vector2
@@ -65,7 +66,6 @@ class Button:
         # let you know when mouse is over button and button was pressed.
         if self.buttondown and self.mouseover:
             self.buttondown = False
- 
 
 #Background class.
 class Background(pg.sprite.Sprite):
