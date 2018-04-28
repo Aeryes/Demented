@@ -15,7 +15,7 @@ vec = pg.math.Vector2
 PLAYER_ACC = 1
 PLAYER_FRICTION = -0.12
 PLAYER_GRAV = 0.8
-PLAYER_JUMP = 20
+PLAYER_JUMP = 28
 
 #Superclass of all states
 #Any data you wish to persist between all states would go in here
