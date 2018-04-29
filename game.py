@@ -78,7 +78,7 @@ class Game(States):
                     self.score += 10
                     if self.score > self.highscore:
                         self.highscore = self.score
-                        with open(HS_FILE), 'w') as f:
+                        with open((HS_FILE), 'w') as f:
                             f.write(str(self.score))
 
         if self.player.rect.bottom > HEIGHT:
