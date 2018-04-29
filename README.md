@@ -10,6 +10,8 @@ The game is created using a state machine that dictates what level or menu shoul
 This was my first project and will be completed in my own time, there are no deadlines for this project.
 
 Music credits go to their respected creators. All music used is royalty free.
+- Kevin MacLeod - Comfortable Mystery
+- Letter Box - Far the days to come
 
 ******Dependencies:******
 
