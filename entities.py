@@ -3,7 +3,7 @@ from settings import Music_Mixer, loadCustomFont, States, screen, WIDTH, HEIGHT,
 from time import sleep
 from os import path
 from random import choice
-from images import STICKMAN_IDLE, STICKMAN_RUN_LEFT, STICKMAN_RUN_RIGHT
+from images import STICKMAN_IDLE, STICKMAN_RUN_LEFT, STICKMAN_RUN_RIGHT, PLATFORM_STAGE_ONE
 
 """This section contains entity states which are separate from game and menu states."""
 class Player(pg.sprite.Sprite):
@@ -12,11 +12,13 @@ class Player(pg.sprite.Sprite):
         self.screen = screen
         self.game = game
         
+        self.jumping = False
+        
         self.ms = 0
         self.anim_timer = 0
         self.anim_index = 0
         
-        self.pos = vec(WIDTH / 2, HEIGHT / 2)
+        self.pos = vec(950, 980)
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
         
@@ -24,15 +26,20 @@ class Player(pg.sprite.Sprite):
         self.image = self.images[0]
         
         self.rect = self.image.get_rect()
-        self.rect.center = (980,980)
+        self.rect.center = (950,980)
     
     def jump(self):
+        if self.jumping == False:
+            self.game.jump_sound.play()
+            self.game.jump_sound.set_volume(0.3)
         self.rect.x += 2
         hits = pg.sprite.spritecollide(self, self.game.platforms, False)
         self.rect.x -= 2
+        self.jumping = True
         if hits:
             self.vel.y = -PLAYER_JUMP
-    
+            self.jumping = False
+            
     #Animates the running movement of the player.
     def runAnim(self, dt):
         # Add the delta time to the anim_timer and increment the
@@ -84,8 +91,8 @@ class Platform(pg.sprite.Sprite):
     def __init__(self, x, y, w, h):
         pg.sprite.Sprite.__init__(self)
         
-        self.image = pg.Surface((w, h))
-        self.image.fill((0, 0, 0))
+        self.images = PLATFORM_STAGE_ONE
+        self.image = PLATFORM_STAGE_ONE[0]
         self.rect = self.image.get_rect()
         
         self.rect.x = x

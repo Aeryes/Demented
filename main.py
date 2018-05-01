@@ -1,5 +1,8 @@
+#Music by Kevin Mac Leod, Freesound and Letterbox.
+#This code is free to use for any project. All i ask for is that you link my repo on github.
+
 import pygame as pg
-from mainmenu import MainMenu, GameOver
+from mainmenu import MainMenu
 from game import Game
 from settings import Music_Mixer, loadCustomFont, States, screen
 import sys
@@ -63,8 +66,7 @@ app = Control()
  
 #State Dictionary. Include all state classes here.
 state_dict = {'mainmenu': MainMenu(),
-              'game': Game(),
-              'gameover' : GameOver()}
+              'game' : Game()}
  
 #Setup State is called and sets the initial state of the program
 app.setup_states(state_dict, 'mainmenu')
