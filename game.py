@@ -51,11 +51,11 @@ class Game(States):
                 
     def load_data(self):
         #Load the high score.
-        with open((HS_FILE), 'r') as f:
-            try:
-                self.highscore = int(f.read())
-            except:
-                self.highscore = 0
+        try:
+            with open((HS_FILE), 'r') as f:
+                    self.highscore = int(f.read())
+        except FileNotFoundError:
+            self.highscore = 0
         #Load sounds.
         self.jump_sound = pg.mixer.Sound('Music/jump1.wav')
         
