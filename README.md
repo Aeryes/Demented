@@ -20,7 +20,7 @@ Music credits go to their respected creators. All music used is royalty free.
 
 ******Progress:******
 
-Thing that are done:
+Things that are done:
 - Finished basic player movement.
 - Added in basic collision detection for the player.
 - Created menu screen and artwork for the menu and player.
